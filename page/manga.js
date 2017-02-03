@@ -65,7 +65,7 @@
 	function update(url){
 		$.get("../proxy?url="+encodeURIComponent(url), function(data, textStatus){ 
 			if(textStatus=='success'){
-				manga=$(data.replace('src=','_src='));
+				manga=$(data.replace(/src=/g,'_src='));
 				var newest=manga.find("a:contains('最新章节')").attr('href');//最新章节
 				if(mangaupdate[url]==undefined||mangaupdate[url].newest!=newest){
 					mangaupdate[url]={'newest':newest,'date':Date()};
