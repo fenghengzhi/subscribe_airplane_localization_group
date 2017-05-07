@@ -43,9 +43,9 @@ def __ping():
     return "ok"
 
 
-@route('/assets/<filepath:path>')
+@route('/manga/<filepath:path>')
 def server_static(filepath):
-    return static_file(filepath, root='./page/')
+    return static_file(filepath, root='./manga/')
 
 @route('/proxy')
 def proxy():
@@ -53,10 +53,19 @@ def proxy():
     response = urllib2.urlopen(url) 
     return response.read()
 
+@route('/proxy1/<url:path>')
+def proxy1(url):
+    response = urllib2.urlopen('http://'+url)
+    result=response.read()
+    # result.replace('href="/','href="/proxy1/')#+(url.split('/'))[0]+'/')
+    result.replace('div','test')
+    return result
+
+
 ######### WEBAPP ROUTERS ###############
 @route('/')
 def home():
-    return '<html><body><script>milib.openUrl("http://127.0.0.1:8080/assets/manga.html")</script></body></html>'
+    return '<html><body><script>milib.openUrl("http://127.0.0.1:8080/manga/manga.html")</script></body></html>'
 
 
 ######### WEBAPP ROUTERS ###############
@@ -64,16 +73,17 @@ app = Bottle()
 app.route('/', method='GET')(home)
 app.route('/__exit', method=['GET','HEAD'])(__exit)
 app.route('/__ping', method=['GET','HEAD'])(__ping)
-app.route('/assets/<filepath:path>', method='GET')(server_static)
+app.route('/manga/<filepath:path>', method='GET')(server_static)
 app.route('/proxy', method='GET')(proxy)
+app.route('/proxy1/<url:path>', method='GET')(proxy1)
 
 
 import webbrowser
 
 
 try:
-    server = MyWSGIRefServer(host="127.0.0.1", port="8080")
-    webbrowser.open_new('http://127.0.0.1:8080/assets/manga.html')
+    server = MyWSGIRefServer(host="0.0.0.0", port="8080")
+    webbrowser.open_new('http://127.0.0.1:8080/manga/manga.html')
     app.run(server=server,reloader=False)
 except Exception,ex:
     print "Exception: %s" % repr(ex)
