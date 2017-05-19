@@ -1,7 +1,7 @@
-﻿(function(){//自执行匿名函数
+(function(){//自执行匿名函数
 	//var mangadata=JSON.parse(localStorage.mangadata);
 	//显示漫画
-	mangadata={};
+	window.mangadata={};
 	function showmanga(){
 		$('.mangabox').remove();//移除所有漫画
 		$('#chapterbox').hide();
@@ -9,7 +9,7 @@
 		for(let url in mangadata){
 			let mangabox=mangaboxtamplate.clone(true).addClass('mangabox');
 			try{
-				console.log('start');
+				//console.log('start');
 				mangabox.show();
 				mangabox.appendTo(mangalistbox);
 				mangabox.attr('mangaurl',url);
@@ -23,12 +23,12 @@
 				mangabox.find('.lastview').attr('url',url);
 				mangabox.find('.lastview').attr('mangaurl',url);
 				mangabox.find('.lastview').attr('chapternum',mangadata[url].lastview);
-				mangabox.find('.newest').attr('url',mangadata[url].newest);
+				mangabox.find('.lastviewtitle').text('看到：'+(mangadata[url].chapterdata.chapters[(mangadata[url].lastview)]||{title:"未观看"}).title);
+				mangabox.find('.newest').attr('url',mangadata[url].chapterdata.chapters[mangadata[url].chapterdata.chapters.length-1].url);
 				mangabox.find('.newest').attr('mangaurl',url);
 				mangabox.find('.newest').attr('chapternum',mangadata[url].chapterdata.chapters.length-1);
-				mangabox.find('.lastviewtitle').text('看到：'+(mangadata[url].chapterdata.chapters[(mangadata[url].lastview)]||{title: "未观看"}).title);
-				mangabox.find('.newesttitle').text('最新：'+(mangadata[url].chapterdata.chapters[mangadata[url].chapterdata.chapters.length-1]||{title: "未更新"}).title);
-				console.log('end');
+				mangabox.find('.newesttitle').text('最新：'+(mangadata[url].chapterdata.chapters[mangadata[url].chapterdata.chapters.length-1]||{title:"未更新"}).title);
+				//console.log('end');
 			}finally{continue;}
 		}
 		$(mangasort).change();//触发排序事件
@@ -53,39 +53,53 @@
 	//获取漫画列表
 	$.get("mangalist.txt", function(data, textStatus){ 
 		var mangadatastore=JSON.parse(window.localStorage.mangadata||'{}');
-		var mangalist=data.trim().split('\n');
+		var mangalist=data.trim().split('\r\n');
+		//console.log(mangalist);
 		var mangacount=mangalist.length;
 		waitupdate.mangacount=mangacount;
-		mangalist.forEach(function(currentValue){
-			let url=currentValue.split(',')[0];
-			//let name=currentValue.split(',')[1];
-			mangadata[url]=mangadatastore[url]||{};;
-		})
+		//console.log(mangadatastore);
+		mangalist.forEach(function(url){
+			//console.log(url,mangadatastore[url]);
+			mangadata[url]=mangadatastore[url]||{
+				chapterdata:{
+					author:undefined,
+					brief:undefined,
+					url:url,
+					chapters:[{title:undefined,url:undefined}]
+				},
+				coverurl:undefined,
+				lastview:undefined,
+				name:undefined,
+				time:undefined
+			};
+		});
 		showmanga();
 	});
 	//检查更新
-	function checkupdate(){
+	function checkupdate(event){
 		//console.log('updatenum in checkupdate',waitupdate.updatecount);
 		waitupdate.updatecount=0;
 		//console.log('updatenum in checkupdate',waitupdate.updatecount);
 		for(let url in mangadata){
 			update(url);
 		}
+		event.stopPropagation();
+		event.preventDefault();
 	}
 	$("#updatebutton").one('click',checkupdate);
 	function update(url){
 		$.get("/proxy?url="+encodeURIComponent(url), function(data, textStatus){ 
-			if(textStatus=='success'){
-				manga=$(data.replace(/src=/g,'_src='));
-				let newest=manga.find("a:contains('最新章节')").attr('href');//最新章节
+			if(textStatus==='success'){
+				var manga=$(data.replace(/src=/g,'_src='));
 				//manga.find("a:contains('最新章节')[class='am-btn am-btn-primary am-radius']");
 				mangadata[url].coverurl=manga.find('.am-img-thumbnail').attr('_src');
 				mangadata[url].name=manga.filter('title').text();
 				mangadata[url].chapterdata=mangadata[url].chapterdata||{};
 				mangadata[url].chapterdata.author=manga.find('div.am-u-sm-8 > abbr:nth-child(3)').text();
 				mangadata[url].chapterdata.brief=manga.find('div.am-u-sm-8 > div').text();
-				if(mangadata[url].newest!=newest){
-					mangadata[url].newest=newest;//最新一话url
+				mangadata[url].chapterdata.url=url;
+				let chapters=manga.find('a.am-btn-secondary');
+				if(mangadata[url].chapterdata.chapters.length!==chapters.length){
 					mangadata[url].time=(new Date()).valueOf();//时间戳精确到毫秒
 					let chapters=manga.find('a.am-btn-secondary');
 					mangadata[url].chapterdata.chapters=new Array(chapters.length);//集数信息
