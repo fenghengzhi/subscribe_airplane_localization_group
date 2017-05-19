@@ -5,7 +5,7 @@ This is a sample for qpython webapp
 """
 
 from bottle import Bottle, ServerAdapter
-from bottle import run, debug, route, error, static_file, template, request
+from bottle import run, debug, route, error, static_file, template, request, response
 import urllib2
 import os
 os.chdir(os.path.dirname(__file__))
@@ -43,23 +43,25 @@ def __ping():
     return "ok"
 
 
-@route('/manga/<filepath:path>')
+@route('/<filepath:path>')
 def server_static(filepath):
-    return static_file(filepath, root='./manga/')
+    return static_file(filepath, root='./')
 
 @route('/proxy')
 def proxy():
     url = request.query.url
-    response = urllib2.urlopen(url) 
-    return response.read()
+    return urllib2.urlopen(url).read()
 
 @route('/proxy1/<url:path>')
 def proxy1(url):
-    response = urllib2.urlopen('http://'+url)
-    result=response.read()
-    # result.replace('href="/','href="/proxy1/')#+(url.split('/'))[0]+'/')
-    result.replace('div','test')
-    return result
+    # Content-Type: text/html; charset=UTF-8
+    response1=urllib2.urlopen('http://'+url)
+    result = response1.read()
+    #for header in response1.headers:
+    #    print header
+    #    print response1.headers[header]
+    response.set_header('content-type',response1.headers['content-type'])
+    return result.replace('href="/','href="/proxy1/'+(url.split('/'))[0]+'/').replace('href="http://','href="/proxy1/')
 
 
 ######### WEBAPP ROUTERS ###############
@@ -73,17 +75,16 @@ app = Bottle()
 app.route('/', method='GET')(home)
 app.route('/__exit', method=['GET','HEAD'])(__exit)
 app.route('/__ping', method=['GET','HEAD'])(__ping)
-app.route('/manga/<filepath:path>', method='GET')(server_static)
 app.route('/proxy', method='GET')(proxy)
 app.route('/proxy1/<url:path>', method='GET')(proxy1)
-
+app.route('/<filepath:path>', method='GET')(server_static)
 
 import webbrowser
 
 
 try:
     server = MyWSGIRefServer(host="0.0.0.0", port="8080")
-    webbrowser.open_new('http://127.0.0.1:8080/manga/manga.html')
+    #webbrowser.open_new('http://127.0.0.1:8080/manga/manga.html')
     app.run(server=server,reloader=False)
 except Exception,ex:
     print "Exception: %s" % repr(ex)
