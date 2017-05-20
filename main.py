@@ -37,6 +37,7 @@ class MyWSGIRefServer(ServerAdapter):
 def __exit():
     global server
     server.stop()
+    #os._exit()
 
 @route('/__ping')
 def __ping():

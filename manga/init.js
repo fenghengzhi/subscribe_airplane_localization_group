@@ -1,9 +1,9 @@
 //$(mangalistbox).css('top',$('#header').height()+1);
 $('.mangacover').one('click',function(event){
-	var coverbox=$(this);
+	let coverbox=$(this);
 	//coverbox.css('background-image','url('+coverbox.attr('coverurl')+');');
 	coverbox.text('');
-	var coverimg=$("<img/>").addClass('coverimg');
+	let coverimg=$("<img/>").addClass('coverimg');
 	coverimg.attr('src',coverbox.attr('coverurl'));
 	coverimg.appendTo(coverbox);
 	event.stopPropagation();
@@ -20,10 +20,10 @@ $(searchbox).on('input',function(event){
 		$(mangafilter).change();
 		return;
 	}
-	var searchtext=this.value.toLowerCase();
+	let searchtext=this.value.toLowerCase();
 	$('.mangabox').each(function(){
-		var _this=$(this);
-		var manganame=_this.find('.manganame').text().toLowerCase();
+		let _this=$(this);
+		let manganame=_this.find('.manganame').text().toLowerCase();
 		if(manganame.search(searchtext)>=0)_this.show();
 		else _this.hide();
 	})
@@ -49,7 +49,7 @@ $(mangafilter).change(function(event){
 			$('.mangabox').show();break;
 		case 'read'://已读
 			$('.mangabox').each(function(){
-				var mangabox=$(this);
+				let mangabox=$(this);
 				if(mangabox.find('.lastview').attr('chapternum')===mangabox.find('.newest').attr('chapternum'))
 					mangabox.show();
 				else
@@ -58,7 +58,7 @@ $(mangafilter).change(function(event){
 			break;
 		case 'new'://有更新
 			$('.mangabox').each(function(){
-				var mangabox=$(this);
+				let mangabox=$(this);
 				if(mangabox.find('.lastview').attr('chapternum')!==mangabox.find('.newest').attr('chapternum'))
 					mangabox.show();
 				else
@@ -71,28 +71,28 @@ $(mangafilter).change(function(event){
 	event.preventDefault();
 });
 $('.openurl').click(function(event){
-	var _this=$(this);
-	var mangabox=_this.parents('.mangabox');
+	let _this=$(this);
+	let mangabox=_this.parents('.mangabox');
 	window.open(_this.attr('url'));
-	var url=_this.attr('mangaurl');
+	let url=_this.attr('mangaurl');
 	mangadata[url].lastview=parseInt(_this.attr('chapternum'),10);
 	localStorage.mangadata=JSON.stringify(mangadata);
 	event.stopPropagation();
 	event.preventDefault();
 });//绑定打开事件
 $('.shwochapterbutton').click(function(event){
-	var chapterbox=$('#chapterbox');
-	var _this=$(this);
-	var mangabox=_this.parents('.mangabox');
-	var url=mangabox.attr('mangaurl');
-	var chapterdata=mangadata[url].chapterdata;
+	let chapterbox=$('#chapterbox');
+	let _this=$(this);
+	let mangabox=_this.parents('.mangabox');
+	let url=mangabox.attr('mangaurl');
+	let chapterdata=mangadata[url].chapterdata;
 	if(chapterbox.is(':hidden')){
 		chapterbox.find('.chapterbutton').remove();
 		chapterbox.find('.author').text(chapterdata.author);
 		chapterbox.find('.brief').text(chapterdata.brief);
-		var chapterbuttontamplate=$('.chapterbuttontamplate');
+		let chapterbuttontamplate=$('.chapterbuttontamplate');
 		chapterdata.chapters.forEach(function(chapter,i){
-			var chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
+			let chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
 			chapterbutton.attr('url',chapter.url);
 			chapterbutton.attr('mangaurl',url);
 			chapterbutton.attr('chapternum',i);
@@ -102,7 +102,7 @@ $('.shwochapterbutton').click(function(event){
 			chapterbutton.show();
 		});
 		// for(let i=0;i<mangadata[url].chapters.length;++i){
-			// var chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
+			// let chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
 			// chapterbutton.attr('url',mangadata[url].chapters[i].url);
 			// chapterbutton.attr('mangaurl',url);
 			// chapterbutton.attr('chapternum',i);
@@ -151,6 +151,9 @@ $(mangasort).change(function(event){
 	event.stopPropagation();
 	event.preventDefault();
 });
+
+
+//更多菜单
 $(importdata).click(function(event){
 	event.stopPropagation();
 	event.preventDefault();
@@ -160,7 +163,11 @@ $(exportdata).click(function(event){
 	event.preventDefault();
 });
 $(empty).click(function(event){
-	if(confirm('确认要清空数据吗？'))delete localStorage.mangadata;
+//alert();
+	if(confirm('确认要清空数据吗？')){
+	//window.localStorage.mangadata='{}';
+	delete window.localStorage.mangadata;
+	}
 	event.stopPropagation();
 	event.preventDefault();
 });
@@ -169,3 +176,4 @@ $(closeserver).click(function(event){
 	event.stopPropagation();
 	event.preventDefault();
 });
+//alert('initend');

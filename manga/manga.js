@@ -1,11 +1,12 @@
+//alert('mangastart');
 (function(){//自执行匿名函数
-	//var mangadata=JSON.parse(localStorage.mangadata);
+	//let mangadata=JSON.parse(localStorage.mangadata);
 	//显示漫画
 	window.mangadata={};
 	function showmanga(){
 		$('.mangabox').remove();//移除所有漫画
 		$('#chapterbox').hide();
-		var mangaboxtamplate=$('.mangaboxtamplate');
+		let mangaboxtamplate=$('.mangaboxtamplate');
 		for(let url in mangadata){
 			let mangabox=mangaboxtamplate.clone(true).addClass('mangabox');
 			try{
@@ -35,7 +36,7 @@
 	}
 	function waitupdate(){
 		function updateprocess(process){//process为0~1之间的小数
-			var percent=process*100+'%';
+			let percent=process*100+'%';
 			$('#updatebutton').css('background-image','linear-gradient(to right, #00FF00 '+percent+', #FFFFFF '+percent+')');
 		}
 		waitupdate.updatecount = ++waitupdate.updatecount;		
@@ -51,11 +52,12 @@
 	}
 
 	//获取漫画列表
+	//alert();
 	$.get("mangalist.txt", function(data, textStatus){ 
-		var mangadatastore=JSON.parse(window.localStorage.mangadata||'{}');
-		var mangalist=data.trim().split('\r\n');
+		let mangadatastore=JSON.parse(window.localStorage.mangadata||'{}');
+		let mangalist=data.trim().split('\r\n');
 		//console.log(mangalist);
-		var mangacount=mangalist.length;
+		let mangacount=mangalist.length;
 		waitupdate.mangacount=mangacount;
 		//console.log(mangadatastore);
 		mangalist.forEach(function(url){
@@ -90,7 +92,7 @@
 	function update(url){
 		$.get("/proxy?url="+encodeURIComponent(url), function(data, textStatus){ 
 			if(textStatus==='success'){
-				var manga=$(data.replace(/src=/g,'_src='));
+				let manga=$(data.replace(/src=/g,'_src='));
 				//manga.find("a:contains('最新章节')[class='am-btn am-btn-primary am-radius']");
 				mangadata[url].coverurl=manga.find('.am-img-thumbnail').attr('_src');
 				mangadata[url].name=manga.filter('title').text();
@@ -120,7 +122,7 @@
 // window.open("http://smp.yoedge.com/view/omnibus/1001178");
 // });
 
-// var mangabutton=$('<button>测试按钮1</button>').click(function(){
+// let mangabutton=$('<button>测试按钮1</button>').click(function(){
 // window.open("http://smp.yoedge.com/view/omnibus/1001178");
 // });
 
@@ -129,7 +131,7 @@
 // mangabutton.clone().appendTo('body');
 
 // $.get("../proxy?url=http%3a%2f%2fsmp.yoedge.com%2fview%2fomnibus%2f1001178", function(data, textStatus){ 
-// var manga=$(data);
+// let manga=$(data);
 // manga.find('.am-btn&.am-btn-secondary&.am-radius&.am-btn-sm').length
 // });
 /* mangadata数据详解
