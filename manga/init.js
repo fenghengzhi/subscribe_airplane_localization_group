@@ -83,7 +83,7 @@ $('.openurl').click(function(event){
 });//绑定打开事件
 $(newfirst).click(function(event){
 	$('.chapterbutton').each(function(i,chapterbutton){
-		chapterbutton.style.order=$(chapterbutton).attr(chapternum)*1;
+		chapterbutton.style.order=$(chapterbutton).attr("chapternum")*(-1);
 	})
 	$(".chaptersort").css("color","black");
 	this.style.color="blue";
@@ -93,7 +93,7 @@ $(newfirst).click(function(event){
 });
 $(oldfirst).click(function(event){
 	$('.chapterbutton').each(function(i,chapterbutton){
-		chapterbutton.style.order=$(chapterbutton).attr(chapternum)*1;
+		chapterbutton.style.order=$(chapterbutton).attr("chapternum")*1;
 	})
 	$(".chaptersort").css("color","black");
 	this.style.color="blue";
