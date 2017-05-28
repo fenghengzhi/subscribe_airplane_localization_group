@@ -20,7 +20,7 @@
 				mangabox.find('.manganame').text(mangadata[mangaurl].name||mangaurl);
 				mangabox.find('.mangacover')[0].coverurl=mangadata[mangaurl].coverurl;
 				var lastview=mangabox.find('.lastview')[0];
-				lastview.url=mangadata[mangaurl].chapterdata.chapters[(mangadata[mangaurl].lastview)].url;
+				lastview.url=(mangadata[mangaurl].chapterdata.chapters[(mangadata[mangaurl].lastview||0)]).url;
 				lastview.mangaurl=mangaurl;
 				lastview.chapternum=mangadata[mangaurl].lastview;
 				mangabox.find('.lastviewtitle').text('看到：'+(mangadata[mangaurl].chapterdata.chapters[(mangadata[mangaurl].lastview)]||{title:"未观看"}).title);
@@ -28,7 +28,7 @@
 				newest.url=mangadata[mangaurl].chapterdata.chapters[mangadata[mangaurl].chapterdata.chapters.length-1].url;
 				newest.mangaurl=mangaurl;
 				newest.chapternum=mangadata[mangaurl].chapterdata.chapters.length-1;
-				mangabox.find('.newesttitle').text('最新：'+(mangadata[url].chapterdata.chapters[mangadata[url].chapterdata.chapters.length-1]||{title:"未更新"}).title);
+				mangabox.find('.newesttitle').text('最新：'+(mangadata[mangaurl].chapterdata.chapters[mangadata[mangaurl].chapterdata.chapters.length-1]||{title:"未更新"}).title);
 				//console.log('end');
 			}finally{continue;}
 		}
