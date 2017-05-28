@@ -108,7 +108,7 @@ html,body{
 /* chapterbox部分开始 */
 #chapterbox{
 	flex-shrink:0;
-	border-bottom-style:1px solid gray;
+	border-bottom:1px solid gray;
 }
 .chapterlistbox{
 	display:flex;
