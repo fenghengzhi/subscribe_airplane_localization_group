@@ -22,7 +22,7 @@
 				var lastview=mangabox.find('.lastview')[0];
 				lastview.url=mangadata[mangaurl].chapterdata.chapters[(mangadata[mangaurl].lastview)].url;
 				lastview.mangaurl=mangaurl;
-				lastview.chapternum'=mangadata[mangaurl].lastview;
+				lastview.chapternum=mangadata[mangaurl].lastview;
 				mangabox.find('.lastviewtitle').text('看到：'+(mangadata[mangaurl].chapterdata.chapters[(mangadata[mangaurl].lastview)]||{title:"未观看"}).title);
 				var newest=mangabox.find('.newest')[0];
 				newest.url=mangadata[mangaurl].chapterdata.chapters[mangadata[mangaurl].chapterdata.chapters.length-1].url;
