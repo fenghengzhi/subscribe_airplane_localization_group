@@ -85,8 +85,8 @@ import webbrowser
 
 try:
     server = MyWSGIRefServer(host="0.0.0.0", port="8080")
-    app.run(server=server,reloader=False)
     webbrowser.open_new('http://127.0.0.1:8080/manga/manga.html')
+    app.run(server=server,reloader=False)
 except Exception,ex:
     print "Exception: %s" % repr(ex)
 

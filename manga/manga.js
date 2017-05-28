@@ -1,14 +1,14 @@
-alert('mangastart');
+//alert('mangastart');
 (function(){//自执行匿名函数
-	//let mangadata=JSON.parse(localStorage.mangadata);
+	//var mangadata=JSON.parse(localStorage.mangadata);
 	//显示漫画
 	window.mangadata={};
 	function showmanga(){
 		$('.mangabox').remove();//移除所有漫画
 		$('#chapterbox').hide();
-		let mangaboxtamplate=$('.mangaboxtamplate');
-		for(let url in mangadata){
-			let mangabox=mangaboxtamplate.clone(true).addClass('mangabox');
+		var mangaboxtamplate=$('.mangaboxtamplate');
+		for(var url in mangadata){
+			var mangabox=mangaboxtamplate.clone(true).addClass('mangabox');
 			try{
 				//console.log('start');
 				mangabox.show();
@@ -36,7 +36,7 @@ alert('mangastart');
 	}
 	function waitupdate(){
 		function updateprocess(process){//process为0~1之间的小数
-			let percent=process*100+'%';
+			var percent=process*100+'%';
 			$('#updatebutton').css('background-image','linear-gradient(to right, #00FF00 '+percent+', #FFFFFF '+percent+')');
 		}
 		waitupdate.updatecount = ++waitupdate.updatecount;		
@@ -54,10 +54,10 @@ alert('mangastart');
 	//获取漫画列表
 	//alert();
 	$.get("mangalist.txt", function(data, textStatus){ 
-		let mangadatastore=JSON.parse(window.localStorage.mangadata||'{}');
-		let mangalist=data.trim().split('\r\n');
+		var mangadatastore=JSON.parse(window.localStorage.mangadata||'{}');
+		var mangalist=data.trim().split('\r\n');
 		//console.log(mangalist);
-		let mangacount=mangalist.length;
+		var mangacount=mangalist.length;
 		waitupdate.mangacount=mangacount;
 		//console.log(mangadatastore);
 		mangalist.forEach(function(url){
@@ -82,7 +82,7 @@ alert('mangastart');
 		//console.log('updatenum in checkupdate',waitupdate.updatecount);
 		waitupdate.updatecount=0;
 		//console.log('updatenum in checkupdate',waitupdate.updatecount);
-		for(let url in mangadata){
+		for(var url in mangadata){
 			update(url);
 		}
 		event.stopPropagation();
@@ -92,7 +92,7 @@ alert('mangastart');
 	function update(url){
 		$.get("/proxy?url="+encodeURIComponent(url), function(data, textStatus){ 
 			if(textStatus==='success'){
-				let manga=$(data.replace(/src=/g,'_src='));
+				var manga=$(data.replace(/src=/g,'_src='));
 				//manga.find("a:contains('最新章节')[class='am-btn am-btn-primary am-radius']");
 				mangadata[url].coverurl=manga.find('.am-img-thumbnail').attr('_src');
 				mangadata[url].name=manga.filter('title').text();
@@ -100,13 +100,13 @@ alert('mangastart');
 				mangadata[url].chapterdata.author=manga.find('div.am-u-sm-8 > abbr:nth-child(3)').text();
 				mangadata[url].chapterdata.brief=manga.find('div.am-u-sm-8 > div').text();
 				mangadata[url].chapterdata.url=url;
-				let chapters=manga.find('a.am-btn-secondary');
+				var chapters=manga.find('a.am-btn-secondary');
 				if(mangadata[url].chapterdata.chapters.length!==chapters.length){
 					mangadata[url].time=(new Date()).valueOf();//时间戳精确到毫秒
-					let chapters=manga.find('a.am-btn-secondary');
+					var chapters=manga.find('a.am-btn-secondary');
 					mangadata[url].chapterdata.chapters=new Array(chapters.length);//集数信息
 					//mangadata[url].chapters.forEach()
-					for(let i=0;i<chapters.length;++i){
+					for(var i=0;i<chapters.length;++i){
 						mangadata[url].chapterdata.chapters[i]={
 							url:chapters[i].href,
 							title:chapters[i].text
@@ -122,7 +122,7 @@ alert('mangastart');
 // window.open("http://smp.yoedge.com/view/omnibus/1001178");
 // });
 
-// let mangabutton=$('<button>测试按钮1</button>').click(function(){
+// var mangabutton=$('<button>测试按钮1</button>').click(function(){
 // window.open("http://smp.yoedge.com/view/omnibus/1001178");
 // });
 
@@ -131,7 +131,7 @@ alert('mangastart');
 // mangabutton.clone().appendTo('body');
 
 // $.get("../proxy?url=http%3a%2f%2fsmp.yoedge.com%2fview%2fomnibus%2f1001178", function(data, textStatus){ 
-// let manga=$(data);
+// var manga=$(data);
 // manga.find('.am-btn&.am-btn-secondary&.am-radius&.am-btn-sm').length
 // });
 /* mangadata数据详解
@@ -148,5 +148,5 @@ mangadata[url]={
 	time:
 } */
 })();
-alert('mangaend');
+//alert('mangaend');
 

@@ -1,4 +1,4 @@
-alert('initstart');
+//alert('initstart');
 //$(mangalistbox).css('top',$('#header').height()+1);
 $('.mangacover').one('click',function(event){
 	var coverbox=$(this);
@@ -177,4 +177,4 @@ $(closeserver).click(function(event){
 	event.stopPropagation();
 	event.preventDefault();
 });
-alert('initend');
+//alert('initend');
