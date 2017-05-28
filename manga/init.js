@@ -1,9 +1,10 @@
+alert('initstart');
 //$(mangalistbox).css('top',$('#header').height()+1);
 $('.mangacover').one('click',function(event){
-	let coverbox=$(this);
+	var coverbox=$(this);
 	//coverbox.css('background-image','url('+coverbox.attr('coverurl')+');');
 	coverbox.text('');
-	let coverimg=$("<img/>").addClass('coverimg');
+	var coverimg=$("<img/>").addClass('coverimg');
 	coverimg.attr('src',coverbox.attr('coverurl'));
 	coverimg.appendTo(coverbox);
 	event.stopPropagation();
@@ -20,10 +21,10 @@ $(searchbox).on('input',function(event){
 		$(mangafilter).change();
 		return;
 	}
-	let searchtext=this.value.toLowerCase();
+	var searchtext=this.value.toLowerCase();
 	$('.mangabox').each(function(){
-		let _this=$(this);
-		let manganame=_this.find('.manganame').text().toLowerCase();
+		var _this=$(this);
+		var manganame=_this.find('.manganame').text().toLowerCase();
 		if(manganame.search(searchtext)>=0)_this.show();
 		else _this.hide();
 	})
@@ -49,7 +50,7 @@ $(mangafilter).change(function(event){
 			$('.mangabox').show();break;
 		case 'read'://已读
 			$('.mangabox').each(function(){
-				let mangabox=$(this);
+				var mangabox=$(this);
 				if(mangabox.find('.lastview').attr('chapternum')===mangabox.find('.newest').attr('chapternum'))
 					mangabox.show();
 				else
@@ -58,7 +59,7 @@ $(mangafilter).change(function(event){
 			break;
 		case 'new'://有更新
 			$('.mangabox').each(function(){
-				let mangabox=$(this);
+				var mangabox=$(this);
 				if(mangabox.find('.lastview').attr('chapternum')!==mangabox.find('.newest').attr('chapternum'))
 					mangabox.show();
 				else
@@ -71,28 +72,28 @@ $(mangafilter).change(function(event){
 	event.preventDefault();
 });
 $('.openurl').click(function(event){
-	let _this=$(this);
-	let mangabox=_this.parents('.mangabox');
+	var _this=$(this);
+	var mangabox=_this.parents('.mangabox');
 	window.open(_this.attr('url'));
-	let url=_this.attr('mangaurl');
+	var url=_this.attr('mangaurl');
 	mangadata[url].lastview=parseInt(_this.attr('chapternum'),10);
 	localStorage.mangadata=JSON.stringify(mangadata);
 	event.stopPropagation();
 	event.preventDefault();
 });//绑定打开事件
 $('.shwochapterbutton').click(function(event){
-	let chapterbox=$('#chapterbox');
-	let _this=$(this);
-	let mangabox=_this.parents('.mangabox');
-	let url=mangabox.attr('mangaurl');
-	let chapterdata=mangadata[url].chapterdata;
+	var chapterbox=$('#chapterbox');
+	var _this=$(this);
+	var mangabox=_this.parents('.mangabox');
+	var url=mangabox.attr('mangaurl');
+	var chapterdata=mangadata[url].chapterdata;
 	if(chapterbox.is(':hidden')){
 		chapterbox.find('.chapterbutton').remove();
 		chapterbox.find('.author').text(chapterdata.author);
 		chapterbox.find('.brief').text(chapterdata.brief);
-		let chapterbuttontamplate=$('.chapterbuttontamplate');
+		var chapterbuttontamplate=$('.chapterbuttontamplate');
 		chapterdata.chapters.forEach(function(chapter,i){
-			let chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
+			var chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
 			chapterbutton.attr('url',chapter.url);
 			chapterbutton.attr('mangaurl',url);
 			chapterbutton.attr('chapternum',i);
@@ -102,7 +103,7 @@ $('.shwochapterbutton').click(function(event){
 			chapterbutton.show();
 		});
 		// for(let i=0;i<mangadata[url].chapters.length;++i){
-			// let chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
+			// var chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
 			// chapterbutton.attr('url',mangadata[url].chapters[i].url);
 			// chapterbutton.attr('mangaurl',url);
 			// chapterbutton.attr('chapternum',i);
@@ -176,4 +177,4 @@ $(closeserver).click(function(event){
 	event.stopPropagation();
 	event.preventDefault();
 });
-//alert('initend');
+alert('initend');

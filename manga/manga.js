@@ -1,4 +1,4 @@
-//alert('mangastart');
+alert('mangastart');
 (function(){//自执行匿名函数
 	//let mangadata=JSON.parse(localStorage.mangadata);
 	//显示漫画
@@ -148,3 +148,5 @@ mangadata[url]={
 	time:
 } */
 })();
+alert('mangaend');
+
