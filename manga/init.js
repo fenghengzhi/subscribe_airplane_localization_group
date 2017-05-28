@@ -4,14 +4,15 @@ $('.mangacover').one('click',function(event){
 	var coverbox=$(this);
 	//coverbox.css('background-image','url('+coverbox.attr('coverurl')+');');
 	coverbox.text('');
-	var coverimg=$("<img/>").addClass('coverimg');
-	coverimg.attr('src',coverbox.attr('coverurl'));
-	coverimg.appendTo(coverbox);
+	var coverimg=$("<img/>").addClass('coverimg').appendTo(coverbox);
+	coverimg.attr('src',$(this)[0].coverurl);
 	event.stopPropagation();
 	event.preventDefault();
 });//显示封面
 $('.mangaboxtamplate').click(function(event){
-	window.open($(this).attr('mangaurl'));
+	window.open(this.mangaurl);
+	event.stopPropagation();
+	event.preventDefault();
 	//console.log('mangabox');
 });
 $(searchbox).on('input',function(event){
@@ -24,7 +25,7 @@ $(searchbox).on('input',function(event){
 	var searchtext=this.value.toLowerCase();
 	$('.mangabox').each(function(){
 		var _this=$(this);
-		var manganame=_this.find('.manganame').text().toLowerCase();
+		var manganame=$(this).find('.manganame').text().toLowerCase();
 		if(manganame.search(searchtext)>=0)_this.show();
 		else _this.hide();
 	})
@@ -51,7 +52,7 @@ $(mangafilter).change(function(event){
 		case 'read'://已读
 			$('.mangabox').each(function(){
 				var mangabox=$(this);
-				if(mangabox.find('.lastview').attr('chapternum')===mangabox.find('.newest').attr('chapternum'))
+				if(mangabox.find('.lastview')[0].chapternum===mangabox.find('.newest')[0].chapternum)
 					mangabox.show();
 				else
 					mangabox.hide();
@@ -60,7 +61,7 @@ $(mangafilter).change(function(event){
 		case 'new'://有更新
 			$('.mangabox').each(function(){
 				var mangabox=$(this);
-				if(mangabox.find('.lastview').attr('chapternum')!==mangabox.find('.newest').attr('chapternum'))
+				if(mangabox.find('.lastview')[0].chapternum!==mangabox.find('.newest')[0].chapternum)
 					mangabox.show();
 				else
 					mangabox.hide();
@@ -74,16 +75,16 @@ $(mangafilter).change(function(event){
 $('.openurl').click(function(event){
 	var _this=$(this);
 	var mangabox=_this.parents('.mangabox');
-	window.open(_this.attr('url'));
-	var url=_this.attr('mangaurl');
-	mangadata[url].lastview=parseInt(_this.attr('chapternum'),10);
+	window.open(this.url);
+	var mangaurl=this.mangaurl;
+	mangadata[mangaurl].lastview=this.chapternum*1;
 	localStorage.mangadata=JSON.stringify(mangadata);
 	event.stopPropagation();
 	event.preventDefault();
 });//绑定打开事件
 $(newfirst).click(function(event){
 	$('.chapterbutton').each(function(i,chapterbutton){
-		chapterbutton.style.order=$(chapterbutton).attr("chapternum")*(-1);
+		chapterbutton.style.order=chapterbutton.chapternum*(-1);
 	})
 	$(".chaptersort").css("color","black");
 	this.style.color="blue";
@@ -93,7 +94,7 @@ $(newfirst).click(function(event){
 });
 $(oldfirst).click(function(event){
 	$('.chapterbutton').each(function(i,chapterbutton){
-		chapterbutton.style.order=$(chapterbutton).attr("chapternum")*1;
+		chapterbutton.style.order=chapterbutton.chapternum*1;
 	})
 	$(".chaptersort").css("color","black");
 	this.style.color="blue";
@@ -105,8 +106,8 @@ $('.shwochapterbutton').click(function(event){
 	var chapterbox=$('#chapterbox');
 	var _this=$(this);
 	var mangabox=_this.parents('.mangabox');
-	var url=mangabox.attr('mangaurl');
-	var chapterdata=mangadata[url].chapterdata;
+	var mangaurl=mangabox[0].mangaurl;
+	var chapterdata=mangadata[mangaurl].chapterdata;
 	if(chapterbox.is(':hidden')){
 		chapterbox.find('.chapterbutton').remove();
 		chapterbox.find('.author').text(chapterdata.author);
@@ -114,9 +115,9 @@ $('.shwochapterbutton').click(function(event){
 		var chapterbuttontamplate=$('.chapterbuttontamplate');
 		chapterdata.chapters.forEach(function(chapter,i){
 			var chapterbutton=chapterbuttontamplate.clone(true).addClass('chapterbutton');
-			chapterbutton.attr('url',chapter.url);
-			chapterbutton.attr('mangaurl',url);
-			chapterbutton.attr('chapternum',i);
+			chapterbutton[0].url=chapter.url;
+			chapterbutton[0].mangaurl=mangaurl;
+			chapterbutton[0].chapternum=i;
 			chapterbutton.text(chapter.title);
 			chapterbutton.insertAfter(chapterbuttontamplate);
 			chapterbutton.show();
@@ -132,7 +133,7 @@ $('.shwochapterbutton').click(function(event){
 			// chapterbutton.show();
 		// }
 		$(newfirst).click();
-		chapterbox.css('order',parseInt(mangabox.css('order'),10)+1);
+		chapterbox.css('order',mangabox.css('order')*1+1);
 		chapterbox.show("normal");
 	}else{
 		chapterbox.hide("normal");
