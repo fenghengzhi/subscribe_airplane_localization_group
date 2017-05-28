@@ -82,7 +82,7 @@ $('.openurl').click(function(event){
 	event.preventDefault();
 });//绑定打开事件
 $(newfirst).click(function(event){
-	$('.chapterbutton').forEach(function(chapterbutton){
+	$('.chapterbutton').each(function(i,chapterbutton){
 		chapterbutton.style.order=$(chapterbutton).attr(chapternum)*1;
 	})
 	$(".chaptersort").css("color","black");
@@ -92,7 +92,7 @@ $(newfirst).click(function(event){
 
 });
 $(oldfirst).click(function(event){
-	$('.chapterbutton').forEach(function(chapterbutton){
+	$('.chapterbutton').each(function(i,chapterbutton){
 		chapterbutton.style.order=$(chapterbutton).attr(chapternum)*1;
 	})
 	$(".chaptersort").css("color","black");
