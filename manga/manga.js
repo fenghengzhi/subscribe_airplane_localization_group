@@ -67,7 +67,7 @@
 					author:undefined,
 					brief:undefined,
 					mangaurl:mangaurl,
-					chapters:[{title:undefined,url:undefined}]
+					chapters:[]
 				},
 				coverurl:undefined,
 				lastview:undefined,
