@@ -179,10 +179,13 @@ $(mangasort).change(function(event){
 $(importdata).click(function(event){
 	event.stopPropagation();
 	event.preventDefault();
+	var mangadata=prompt('导入');
+	if(mangadata!=null)window.localStorage.mangadata=mamgadata;
 });
 $(exportdata).click(function(event){
 	event.stopPropagation();
 	event.preventDefault();
+	prompt('导出',window.localStorage.mangadata);
 });
 $(empty).click(function(event){
 //alert();
