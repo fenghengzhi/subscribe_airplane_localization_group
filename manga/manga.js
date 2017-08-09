@@ -2,6 +2,7 @@
 (function(){//自执行匿名函数
 	//var mangadata=JSON.parse(localStorage.mangadata);
 	//显示漫画
+	$.ajaxSetup({cache:false});
 	window.mangadata={};
 	function showmanga(){
 		$('.mangabox').remove();//移除所有漫画
